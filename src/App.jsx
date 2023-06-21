@@ -1,25 +1,26 @@
 import { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 function App() {
-  const [data, setData] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    setLoading(true);
     fetch("https://dummyjson.com/todos")
       .then((res) => res.json())
-      .then((json) => setData(json))
-      .then(() => setLoading(false));
+      .then((data) => {
+        setData(data.todos);
+      })
+      .catch((error) => console.log(error));
   }, []);
-
-  if (loading) return <h5>Loading...</h5>;
 
   return (
     <>
       <h1>TO DO LIST</h1>
-      {data.map((todos) => {
-        <p>hi {todos.todo}</p>;
-      })}
+      <ul>
+        {data.map((data) => {
+          return <li key={uuidv4()}>{data.todo}</li>;
+        })}
+      </ul>
     </>
   );
 }
